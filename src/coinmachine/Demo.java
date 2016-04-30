@@ -47,8 +47,8 @@ public class Demo {
 		// CLUDGE: how to get the currency?  Look at the first coin in machine.
 		String currency = "";
 		if (machine.getCount() > 0) currency = machine.getCoins().get(0).getCurrency();
-//		System.out.printf("Machine contains %d coins and value %d %s\n",
-//				machine.getCount(), machine.getBalance(), currency);	
+		System.out.printf("Machine contains %d coins and value %d %s\n",
+				machine.getCount(), machine.getBalance(), currency);	
 		if (machine.isFull()) System.out.println("Machine is FULL.");
 	}
 	

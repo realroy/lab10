@@ -15,6 +15,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import java.awt.Color;
 
+@SuppressWarnings("serial")
 public class CoinMachineStatusApp extends JFrame implements Observer {
 
 	private JPanel contentPane;
