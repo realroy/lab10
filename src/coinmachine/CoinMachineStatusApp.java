@@ -1,4 +1,4 @@
-import java.awt.BorderLayout;
+package coinmachine;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -8,33 +8,30 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.util.Observable;
+import java.util.Observer;
+
 import javax.swing.JTextField;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import java.awt.Color;
 
-public class CoinMachineStatusApp extends JFrame {
+public class CoinMachineStatusApp extends JFrame implements Observer {
 
 	private JPanel contentPane;
 	private JTextField textFieldCount;
 	private JLabel lblCoins, lblStatus;
 
-	public static void main(String[] args) {
+	public CoinMachineStatusApp() {
+		initComponent();
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					CoinMachineStatusApp frame = new CoinMachineStatusApp();
-					frame.setVisible(true);
+					setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
-	}
-
-	public CoinMachineStatusApp() {
-		initComponent();
 	}
 	
 	public void initComponent() {
@@ -84,5 +81,21 @@ public class CoinMachineStatusApp extends JFrame {
 					.addGap(6))
 		);
 		contentPane.setLayout(gl_contentPane);
+	}
+
+	@Override
+	public void update(Observable subject, Object info) {
+		if(subject instanceof CoinMachine){
+			CoinMachine coinMachine = (CoinMachine) subject;
+			this.textFieldCount.setText(String.valueOf(coinMachine.getCount()));
+			if(coinMachine.isFull()){
+				this.lblStatus.setText("Full capicity");
+				this.lblStatus.setForeground(Color.RED);
+			}
+			
+			
+		}
+		else{}
+		
 	}
 }
