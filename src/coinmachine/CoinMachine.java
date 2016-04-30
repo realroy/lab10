@@ -15,7 +15,6 @@ public class CoinMachine extends Observable {
 	private List<Coin> coins;
 	/** max number of coins you can put in the machine */
 	private int capacity; 
-	private CoinMachineStatusApp coinMachineStatusApp = new CoinMachineStatusApp();
 	/** 
 	 * Create a new coin machine with a fixed capacity.
 	 */
@@ -62,7 +61,6 @@ public class CoinMachine extends Observable {
 		if (m.getValue() <= 0) throw new IllegalArgumentException("Coin must have positive value");
 		boolean result = coins.add(m);
 		//TODO notify observers
-		addObserver(coinMachineStatusApp);
 		setChanged();
 		notifyObservers();
 		

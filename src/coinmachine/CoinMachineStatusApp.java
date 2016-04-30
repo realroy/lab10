@@ -46,7 +46,7 @@ public class CoinMachineStatusApp extends JFrame implements Observer {
 		lblCoins = new JLabel("#Coins:");
 		lblCoins.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		
-		lblStatus = new JLabel("Aceppting Coins");
+		lblStatus = new JLabel("Acceppting Coins");
 		lblStatus.setForeground(Color.GREEN);
 		lblStatus.setHorizontalAlignment(SwingConstants.CENTER);
 		lblStatus.setFont(new Font("Tahoma", Font.PLAIN, 18));
@@ -90,13 +90,10 @@ public class CoinMachineStatusApp extends JFrame implements Observer {
 			CoinMachine coinMachine = (CoinMachine) subject;
 			this.textFieldCount.setText(String.valueOf(coinMachine.getCount()));
 			if(coinMachine.isFull()){
-				this.lblStatus.setText("Full capicity");
+				this.lblStatus.setText("Machine is FULL.");
 				this.lblStatus.setForeground(Color.RED);
-			}
-			
-			
+			}	
 		}
-		else{}
 		
 	}
 }

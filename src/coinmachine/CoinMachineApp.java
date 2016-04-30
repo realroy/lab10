@@ -5,27 +5,31 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.border.TitledBorder;
 import javax.swing.JLabel;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.Font;
+import java.util.Observable;
+import java.util.Observer;
+
 import javax.swing.JButton;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import java.awt.Color;
 import javax.swing.JProgressBar;
+import javax.swing.SwingConstants;
+
 
 @SuppressWarnings("serial")
-public class CoinMachineApp extends JFrame {
+public class CoinMachineApp extends JFrame implements Observer {
 
 	private JPanel contentPane, InputPanel;
 	private JLabel lblBalance, lblStatus;
-	private JProgressBar progressBar;
-	private JButton btnTenBaht, btnFiveBaht, btnOneBaht;
+	private JLabel lblCount;
+	JProgressBar progressBar;
+	JButton btnTenBaht, btnFiveBaht, btnOneBaht;
 
 	public CoinMachineApp() {
+		setResizable(false);
 		initComponent();
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -47,44 +51,22 @@ public class CoinMachineApp extends JFrame {
 		setContentPane(contentPane);
 		
 		InputPanel = new JPanel();
+		InputPanel.setBounds(5, 56, 369, 124);
 		InputPanel.setBorder(new TitledBorder(null, "Insert Money", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
 		lblBalance = new JLabel("Balance: 0");
+		lblBalance.setBounds(15, 16, 100, 22);
 		lblBalance.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		
 		lblStatus = new JLabel("Status:");
+		lblStatus.setBounds(125, 16, 55, 22);
 		lblStatus.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		
 		progressBar = new JProgressBar();
+		progressBar.setBounds(198, 21, 166, 17);
 		progressBar.setMaximum(10);
 		progressBar.setForeground(Color.GREEN);
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addComponent(InputPanel, GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(lblBalance, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(lblStatus, GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
-					.addGap(18)
-					.addComponent(progressBar, GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
-					.addContainerGap())
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(5)
-							.addComponent(progressBar, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-							.addComponent(lblBalance)
-							.addComponent(lblStatus, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-					.addGap(18)
-					.addComponent(InputPanel, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE))
-		);
+		contentPane.setLayout(null);
 		InputPanel.setLayout(new BoxLayout(InputPanel, BoxLayout.X_AXIS));
 		
 		btnOneBaht = new JButton("");
@@ -98,7 +80,33 @@ public class CoinMachineApp extends JFrame {
 		btnTenBaht = new JButton("");
 		btnTenBaht.setIcon(new ImageIcon(CoinMachineApp.class.getResource("/images/10baht.png")));
 		InputPanel.add(btnTenBaht);
-		contentPane.setLayout(gl_contentPane);
+		contentPane.add(InputPanel);
+		contentPane.add(lblBalance);
+		contentPane.add(lblStatus);
+		
+		lblCount = new JLabel("0");
+		lblCount.setHorizontalTextPosition(SwingConstants.CENTER);
+		lblCount.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCount.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblCount.setBounds(260, 21, 46, 14);
+		contentPane.add(lblCount);
+		contentPane.add(progressBar);
+	}
+
+	@Override
+	public void update(Observable subject, Object info) {
+		if(subject instanceof CoinMachine){
+			CoinMachine coinMachine = (CoinMachine) subject;
+			int count 	= coinMachine.getCount(),
+				balance = coinMachine.getBalance();
+			this.progressBar.setValue(count);
+			this.lblCount.setText(String.valueOf(count));
+			this.lblBalance.setText("Balance: " + String.valueOf(balance));
+			if(coinMachine.isFull()){
+				this.progressBar.setForeground(Color.RED);
+			}	
+		}
+		
 	}
 
 }
